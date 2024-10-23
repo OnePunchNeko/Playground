@@ -1,4 +1,4 @@
-name: Deploy Infrastructure to Azure Dev
+name: Deploy to Azure Dev
 
 on:
   workflow_dispatch:
