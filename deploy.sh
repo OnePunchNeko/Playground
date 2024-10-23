@@ -7,11 +7,16 @@ slackWebhookUrl=$4
 
 # Example Message
 # {
-#     "text": "⚠️ Start Deploying Azure Stack!! ⚠️"
+#   "blocks": [
+#     {
+#       "type": "section",
+#       "text": { "text": "@here Hello Date Picker!!", "type": "mrkdwn" }
+#     }
+#   ]
 # }
 
 curl -X POST -H 'Content-type: application/json' \
-    --data "{\"text\":\"@here ⚠️ Start Deploying Azure Stack *${stackName}* to *${resourceGroup}* ⚠️\"}" \
+    --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\": \"@here ⚠️ Start Deploying Azure Stack *${stackName}* to *${resourceGroup}* ⚠️\", \"type\": \"mrkdwn\"}}]}" \
     ${slackWebhookUrl}
 
 # Deploy Azure Stack and keep the exit code without stopping the script 
@@ -27,12 +32,12 @@ az stack group create \
 if [[ -z $exit_code || $exit_code -eq 0 ]]; then
     # send success notification
     curl -X POST -H 'Content-type: application/json' \
-        --data "{\"text\":\"@here ✅ Finish Deploying Azure Stack *${stackName}* to *${resourceGroup}* 🥳\"}" \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ✅ Finish Deploying Azure Stack *${stackName}* to *${resourceGroup}* 🥳\", \"type\": \"mrkdwn\"}}]}" \
         ${slackWebhookUrl}
 else
     # send failure notification
     curl -X POST -H 'Content-type: application/json' \
-        --data "{\"text\":\"@here ❌ Failed Deploying Azure Stack *${stackName}* to *${resourceGroup}* 😨\"}" \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ❌ Failed Deploying Azure Stack *${stackName}* to *${resourceGroup}* 😨\", \"type\": \"mrkdwn\"}}]}" \
         ${slackWebhookUrl}
 
     exit 1

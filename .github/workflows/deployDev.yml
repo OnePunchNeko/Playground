@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-infrastructure:
+  DeployAzureStack:
     runs-on: ubuntu-latest
     environment: Development
 
