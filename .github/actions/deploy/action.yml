@@ -80,7 +80,7 @@ runs:
         SLACK_WEBHOOK_URL: ${{ inputs.slackWebhookUrl }}
       run: |
         curl -X POST -H 'Content-type: application/json' \
-        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ✅ Finish Deploying Azure Stack *${STACK_NAME}* to *${STACK_RESOURCE_GROUP}* 🥳\", \"type\": \"mrkdwn\"}}]}" \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ✅ Deploying Azure Stack *${STACK_NAME}* to *${STACK_RESOURCE_GROUP}* Completed 🥳\", \"type\": \"mrkdwn\"}}]}" \
         ${SLACK_WEBHOOK_URL}
       shell: bash
 
@@ -92,6 +92,6 @@ runs:
         SLACK_WEBHOOK_URL: ${{ inputs.slackWebhookUrl }}
       run: |
         curl -X POST -H 'Content-type: application/json' \
-        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ❌ Failed Deploying Azure Stack *${STACK_NAME}* to *${STACK_RESOURCE_GROUP}* 😨\", \"type\": \"mrkdwn\"}}]}" \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ❌ Deploying Azure Stack *${STACK_NAME}* to *${STACK_RESOURCE_GROUP}* Failed 😨\", \"type\": \"mrkdwn\"}}]}" \
         ${SLACK_WEBHOOK_URL}
       shell: bash
