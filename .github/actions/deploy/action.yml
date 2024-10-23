@@ -25,6 +25,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Notify the Slack Channel Start
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\": \"@here ⚠️ Start Deploying Azure Stack *${stackName}* to *${resourceGroup}* ⚠️\", \"type\": \"mrkdwn\"}}]}" \
+        ${slackWebhookUrl}
+      shell: bash
+
     - name: Bicep Build
       uses: Azure/bicep-build-action@v1.0.1
       with:
@@ -53,3 +60,19 @@ runs:
           ${STACK_NAME} \
           ${STACK_RESOURCE_GROUP} \
           ${SLACK_WEBHOOK_URL}
+
+    - name: Notify the Slack Channel Success
+      if: ${{ success() }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ✅ Finish Deploying Azure Stack *${stackName}* to *${resourceGroup}* 🥳\", \"type\": \"mrkdwn\"}}]}" \
+        ${slackWebhookUrl}
+      shell: bash
+
+    - name: Notify the Slack Channel Failure
+      if: ${{ failure() }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ❌ Failed Deploying Azure Stack *${stackName}* to *${resourceGroup}* 😨\", \"type\": \"mrkdwn\"}}]}" \
+        ${slackWebhookUrl}
+      shell: bash

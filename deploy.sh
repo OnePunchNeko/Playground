@@ -15,9 +15,9 @@ slackWebhookUrl=$4
 #   ]
 # }
 
-curl -X POST -H 'Content-type: application/json' \
-    --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\": \"@here ⚠️ Start Deploying Azure Stack *${stackName}* to *${resourceGroup}* ⚠️\", \"type\": \"mrkdwn\"}}]}" \
-    ${slackWebhookUrl}
+# curl -X POST -H 'Content-type: application/json' \
+#     --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\": \"@here ⚠️ Start Deploying Azure Stack *${stackName}* to *${resourceGroup}* ⚠️\", \"type\": \"mrkdwn\"}}]}" \
+#     ${slackWebhookUrl}
 
 # Deploy Azure Stack and keep the exit code without stopping the script 
 az stack group create \
@@ -29,18 +29,20 @@ az stack group create \
     --tags RG=${resourceGroup} \
     --yes || exit_code=$? 
 
-if [[ -z $exit_code || $exit_code -eq 0 ]]; then
-    # send success notification
-    curl -X POST -H 'Content-type: application/json' \
-        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ✅ Finish Deploying Azure Stack *${stackName}* to *${resourceGroup}* 🥳\", \"type\": \"mrkdwn\"}}]}" \
-        ${slackWebhookUrl}
-else
-    # send failure notification
-    curl -X POST -H 'Content-type: application/json' \
-        --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ❌ Failed Deploying Azure Stack *${stackName}* to *${resourceGroup}* 😨\", \"type\": \"mrkdwn\"}}]}" \
-        ${slackWebhookUrl}
+exit $exit_code
 
-    exit 1
-fi
+# if [[ -z $exit_code || $exit_code -eq 0 ]]; then
+#     # send success notification
+#     curl -X POST -H 'Content-type: application/json' \
+#         --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ✅ Finish Deploying Azure Stack *${stackName}* to *${resourceGroup}* 🥳\", \"type\": \"mrkdwn\"}}]}" \
+#         ${slackWebhookUrl}
+# else
+#     # send failure notification
+#     curl -X POST -H 'Content-type: application/json' \
+#         --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\":\"@here ❌ Failed Deploying Azure Stack *${stackName}* to *${resourceGroup}* 😨\", \"type\": \"mrkdwn\"}}]}" \
+#         ${slackWebhookUrl}
+
+#     exit 1
+# fi
 
 
