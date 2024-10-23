@@ -3,8 +3,7 @@
 stackTemplate=$1
 stackName=$2
 resourceGroup=$3
-stackEnv=$4
-slackWebhookUrl=$5
+slackWebhookUrl=$4
 
 # Example Message
 # {
@@ -22,7 +21,7 @@ az stack group create \
     --template-file ${stackTemplate} \
     --deny-settings-mode denyDelete \
     --action-on-unmanage deleteAll \
-    --tags env=${stackEnv} rg=${resourceGroup} \
+    --tags RG=${resourceGroup} \
     --yes || exit_code=$? 
 
 if [[ -z $exit_code || $exit_code -eq 0 ]]; then

@@ -16,9 +16,6 @@ inputs:
   stackName:
     description: "Name of the stack"
     required: true
-  stackEnv:
-    description: "Environment of the stack"
-    required: true
   stackResourceGroup:
     description: "Resource group for the stack"
     required: true
@@ -45,7 +42,6 @@ runs:
       uses: azure/cli@v2.1.0
       env:
         STACK_NAME: ${{ inputs.stackName }}
-        STACK_ENV: ${{ inputs.stackEnv }}
         STACK_RESOURCE_GROUP: ${{ inputs.stackResourceGroup }}
         SLACK_WEBHOOK_URL: ${{ inputs.slackWebhookUrl }}
       with:
@@ -56,5 +52,4 @@ runs:
           ${GITHUB_WORKSPACE}/__azure_stack.json \
           ${STACK_NAME} \
           ${STACK_RESOURCE_GROUP} \
-          ${STACK_ENV} \
           ${SLACK_WEBHOOK_URL}

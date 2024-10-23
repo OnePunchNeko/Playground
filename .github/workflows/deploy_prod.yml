@@ -1,4 +1,4 @@
-name: Deploy Infrastructure to Azure Dev
+name: Deploy Infrastructure to Azure Prod
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ permissions:
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
-    environment: Development
+    environment: Production
 
     steps:
       - name: checkout
