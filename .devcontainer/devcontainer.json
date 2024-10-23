@@ -1,0 +1,28 @@
+{
+    "name": "Playground",
+    "image": "mcr.microsoft.com/devcontainers/python:latest",
+    "postAttachCommand": "sudo apt-get update && sudo apt-get upgrade -y",
+    "features": {
+        "ghcr.io/devcontainers/features/azure-cli:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/powershell:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "Github.copilot",
+                "GitHub.copilot-chat",
+                "ms-azuretools.vscode-docker",
+                "GitHub.vscode-github-actions",
+                "esbenp.prettier-vscode",
+                "ms-azuretools.vscode-bicep",
+                "ms-vscode.azurecli",
+                "ms-vscode.powershell"
+            ],
+            "settings": {
+                "files.eol": "\n",
+                "editor.formatOnSave": true
+            }
+        }
+    }
+}

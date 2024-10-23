@@ -1,0 +1,60 @@
+name: "Deploy Azure Stack"
+description: "Deploy Azure Stack with configuration"
+inputs:
+  azureTenantId:
+    description: "Azure Tenant ID"
+    required: true
+  azureClientId:
+    description: "Azure Client ID"
+    required: true
+  azureSubscriptionId:
+    description: "Azure Subscription ID"
+    required: true
+  bicepFilePath:
+    description: "Path to the Bicep file"
+    required: true
+  stackName:
+    description: "Name of the stack"
+    required: true
+  stackEnv:
+    description: "Environment of the stack"
+    required: true
+  stackResourceGroup:
+    description: "Resource group for the stack"
+    required: true
+  slackWebhookUrl:
+    description: "Slack Webhook URL"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Bicep Build
+      uses: Azure/bicep-build-action@v1.0.1
+      with:
+        bicepFilePath: ${{ inputs.bicepFilePath }}
+        outputFilePath: ${GITHUB_WORKSPACE}/__azure_stack.json
+
+    - name: Login to Azure
+      uses: azure/login@v2.2.0
+      with:
+        tenant-id: ${{ inputs.azureTenantId }}
+        client-id: ${{ inputs.azureClientId }}
+        subscription-id: ${{ inputs.azureSubscriptionId }}
+
+    - name: Run Azure Deployment script
+      uses: azure/cli@v2.1.0
+      env:
+        STACK_NAME: ${{ inputs.stackName }}
+        STACK_ENV: ${{ inputs.stackEnv }}
+        STACK_RESOURCE_GROUP: ${{ inputs.stackResourceGroup }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slackWebhookUrl }}
+      with:
+        azcliversion: latest
+        inlineScript: |
+          chmod +x ${GITHUB_WORKSPACE}/deploy.sh  
+          ${GITHUB_WORKSPACE}/deploy.sh \
+          ${GITHUB_WORKSPACE}/__azure_stack.json \
+          ${STACK_NAME} \
+          ${STACK_RESOURCE_GROUP} \
+          ${STACK_ENV} \
+          ${SLACK_WEBHOOK_URL}
