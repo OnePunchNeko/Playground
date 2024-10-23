@@ -20,6 +20,8 @@ slackWebhookUrl=$4
 #     ${slackWebhookUrl}
 
 # Deploy Azure Stack and keep the exit code without stopping the script 
+exit 1
+
 az stack group create \
     --name ${stackName} \
     --resource-group ${resourceGroup} \
