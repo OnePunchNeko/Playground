@@ -31,6 +31,15 @@ runs:
         STACK_RESOURCE_GROUP: ${{ inputs.stackResourceGroup }}
         SLACK_WEBHOOK_URL: ${{ inputs.slackWebhookUrl }}
       run: |
+        # Example Slack Message Body
+        # {
+        #   "blocks": [
+        #     {
+        #       "type": "section",
+        #       "text": { "text": "@here Hello World!!", "type": "mrkdwn" }
+        #     }
+        #   ]
+        # }
         curl -X POST -H 'Content-type: application/json' \
         --data "{\"blocks\": [{\"type\": \"section\", \"text\": {\"text\": \"@here ⚠️ Start Deploying Azure Stack *${STACK_NAME}* to *${STACK_RESOURCE_GROUP}* ⚠️\", \"type\": \"mrkdwn\"}}]}" \
         ${SLACK_WEBHOOK_URL}
@@ -54,7 +63,6 @@ runs:
       env:
         STACK_NAME: ${{ inputs.stackName }}
         STACK_RESOURCE_GROUP: ${{ inputs.stackResourceGroup }}
-        SLACK_WEBHOOK_URL: ${{ inputs.slackWebhookUrl }}
       with:
         azcliversion: latest
         inlineScript: |
@@ -62,8 +70,7 @@ runs:
           ${GITHUB_WORKSPACE}/deploy.sh \
           ${GITHUB_WORKSPACE}/__azure_stack.json \
           ${STACK_NAME} \
-          ${STACK_RESOURCE_GROUP} \
-          ${SLACK_WEBHOOK_URL}
+          ${STACK_RESOURCE_GROUP}
 
     - name: Notify the Slack Channel Success
       if: ${{ success() }}
